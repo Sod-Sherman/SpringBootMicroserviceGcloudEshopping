@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-service
+  labels:
+    app: stock-service
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: stock-service
+    spec:
+      containers:
+        - name: stock-service
+          image: rustembayetov/stock_service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: minimum-stock-amount
+              valueFrom:
+                secretKeyRef:
+                  name: global-secrets
+                  key: minimum-stock-amount
+            - name: jwt-secret
+              valueFrom:
+                secretKeyRef:
+                  name: global-secrets
+                  key: jwt-secret
+            - name: service-secret
+              valueFrom:
+                secretKeyRef:
+                  name: global-secrets
+                  key: service-secret
+  selector:
+    matchLabels:
+      app: stock-service

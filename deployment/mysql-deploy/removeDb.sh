@@ -1,0 +1,2 @@
+MYSQLPOD=$(kubectl get pod -l app=mysql -o jsonpath="{.items[0].metadata.name}")
+kubectl exec -ti $MYSQLPOD  -- mysql --user=root --password=rootPassword -e "drop schema products; drop schema orders; drop schema users;";

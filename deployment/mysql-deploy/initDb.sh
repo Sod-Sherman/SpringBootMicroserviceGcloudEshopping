@@ -1,0 +1,2 @@
+MYSQLPOD=$(kubectl get pod -l app=mysql -o jsonpath="{.items[0].metadata.name}")
+kubectl exec -ti $MYSQLPOD  -- mysql --user=root --password=rootPassword -e "create schema products; create schema orders; create schema users; grant all privileges on *.* to 'sa'@'%' identified by 'password'";

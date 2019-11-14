@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ea2-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: 104.197.197.191
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /orders/*
+            backend:
+              serviceName: orders-service
+              servicePort: 8080
+
+          - path: /products/*
+            backend:
+              serviceName: products-service
+              servicePort: 8080
+
+
+          - path: /users/*
+            backend:
+              serviceName: users-service
+              servicePort: 8080
+
+          - path: /auth/*
+            backend:
+              serviceName: auth-service
+              servicePort: 8080

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-service
+  labels:
+    app: users-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: users-service
+    spec:
+      containers:
+        - name: users-service
+          image: rustembayetov/users_service
+          ports:
+            - containerPort: 8080
+          env:                  # Environment variables supplied to the Pod
+            - name: SPRING_DATASOURCE_USERNAME # Name of the environment variable
+              valueFrom:          # Get the value of environment variable from kubernetes secrets
+                secretKeyRef:
+                  name: mysql-users-service-secrets
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-users-service-secrets
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-users-service-secrets
+                  key: MYSQL_URL
+            - name: SERVER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-users-service-secrets
+                  key: SERVER_PORT
+  selector:
+    matchLabels:
+      app: users-service

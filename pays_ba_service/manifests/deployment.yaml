@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pays-ba-service
+  labels:
+    app: pays-ba-service
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pays-ba-service
+    spec:
+      containers:
+        - name: pays-ba-service
+          image: rustembayetov/pays_ba_service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: jwt-secret
+              valueFrom:
+                secretKeyRef:
+                  name: global-secrets
+                  key: jwt-secret
+            - name: service-secret
+              valueFrom:
+                secretKeyRef:
+                  name: global-secrets
+                  key: service-secret
+
+  selector:
+    matchLabels:
+      app: pays-ba-service
